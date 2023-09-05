@@ -28,6 +28,8 @@ if __name__ == "__main__":
     _appium_service.start()
     LOGGER.info(f"Appium service start")
 
+    LOGGER.info(selenium.webdriver.common.utils.is_url_connectable(4723))
+
     try:
         _driver = webdriver.Remote(r"http://localhost:4723", capabilities)
     except urllib3.exceptions.MaxRetryError:
@@ -36,10 +38,12 @@ if __name__ == "__main__":
 
     LOGGER.info(f"{capabilities['deviceName']} is connected.")
 
+    _driver.implicitly_wait(3)
+
     try:
         _driver.find_element(by=AppiumBy.XPATH, value='//*[@text="Battery"]')
         LOGGER.info("find the text is Battery.")
-    except (selenium.common.exceptions.NoSuchElementException, selenium.common.exceptions.NoSuchElementException):
+    except selenium.common.exceptions.NoSuchElementException:
         LOGGER.warn("could not find the text is Battery.")
 
     try:

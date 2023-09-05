@@ -8,6 +8,7 @@ from appium.webdriver.common.appiumby import AppiumBy
 
 import urllib3.exceptions
 import selenium.common.exceptions
+from  selenium.webdriver.common.utils import is_url_connectable
 
 LOGGER = Logger(log_name=__name__, stream_log_level=logging.DEBUG)
 
@@ -30,6 +31,8 @@ if __name__ == "__main__":
         exit()
 
     LOGGER.info(f"{capabilities['deviceName']} is connected.")
+
+    _driver.implicitly_wait(3)
 
     try:
         _driver.find_element(by=AppiumBy.XPATH, value='//*[@text="Battery"]')
