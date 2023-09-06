@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-
 import logging
 import math
-import time
+from typing import Union
 
 from miraelogger import Logger
 from appium.webdriver.common.appiumby import AppiumBy
@@ -15,65 +14,98 @@ import selenium.common.exceptions
 LOGGER = Logger(log_name=__name__, stream_log_level=logging.DEBUG)
 
 
-def touch_element(driver, xpath, timeout=1.0) -> None:
-    """Touch an element in current screen.
+def touch(driver, xpath: Union[str, dict], timeout=1.0) -> None:
+    """Touch an element or position in current screen.
 
     :param WebDriver driver: WebDriver obj.
-    :param str xpath: Target element's xpath expression.
+    :param Union[str, dict] xpath: Target element's xpath expression or Target position dictionary {"x": x, "y": y}.
     :param float timeout: Waiting the timeout value to find element.
     """
-    driver.implicitly_wait(timeout)
-    try:
-        _target = driver.find_element(by=AppiumBy.XPATH, value=xpath)
-        TouchAction(driver).tap(_target).perform()
-        LOGGER.debug(f"Touch the '{xpath}' is success.")
-    except (selenium.common.exceptions.NoSuchElementException, RuntimeError) as e1:
-        LOGGER.exception(msg := f"Touch the '{xpath}' is failed")
-        raise e1(msg)
-    except TimeoutError:
-        LOGGER.exception(msg := f"Could not find the '{xpath}' within {timeout} sec.")
-        raise TimeoutError(msg)
+    if isinstance(xpath, str):
+        driver.implicitly_wait(timeout)
+        try:
+            _target = driver.find_element(by=AppiumBy.XPATH, value=xpath)
+            TouchAction(driver).tap(_target).perform()
+            LOGGER.debug(f"Touch the '{xpath}' is success.")
+        except (selenium.common.exceptions.NoSuchElementException, RuntimeError) as e1:
+            LOGGER.exception(msg := f"Touch the '{xpath}' is failed")
+            raise e1(msg)
+        except TimeoutError:
+            LOGGER.exception(msg := f"Could not find the '{xpath}' within {timeout} sec.")
+            raise TimeoutError(msg)
+    elif isinstance(xpath, dict):
+        try:
+            TouchAction(driver).tap(x=xpath['x'], y=xpath['y']).perform()
+            LOGGER.debug(f"Touch the '({xpath})' is success.")
+        except Exception:
+            LOGGER.exception(msg := f"Touch the '({xpath})' is failed.")
+            raise Exception(msg)
+    else:
+        LOGGER.exception(msg := "Please check xpath parameter type is string or dict.")
+        raise Exception(msg)
 
 
-def double_touch_element(driver, xpath, timeout=1.0) -> None:
+def double_touch(driver, xpath: Union[str, dict], timeout=1.0) -> None:
     """Double tap an element in current screen.
 
     :param WebDriver driver: WebDriver obj.
-    :param str xpath: Target element's xpath expression.
+    :param Union[str, dict] xpath: Target element's xpath expression or Target position dictionary {"x": x, "y": y}.
     :param float timeout: Waiting the timeout value to find element.
     """
-    driver.implicitly_wait(timeout)
-    try:
-        _target = driver.find_element(by=AppiumBy.XPATH, value=xpath)
-        TouchAction(driver).tap(_target).perform()
-        TouchAction(driver).tap(_target).perform()
-        LOGGER.debug(f"Double-touch the '{xpath}' is success.")
-    except (selenium.common.exceptions.NoSuchElementException, RuntimeError) as e1:
-        LOGGER.exception(msg := f"Double-touch the '{xpath}' is failed")
-        raise e1(msg)
-    except TimeoutError:
-        LOGGER.exception(msg := f"Could not find the '{xpath}' within {timeout} sec.")
-        raise TimeoutError(msg)
+
+    if isinstance(xpath, str):
+        driver.implicitly_wait(timeout)
+        try:
+            _target = driver.find_element(by=AppiumBy.XPATH, value=xpath)
+            TouchAction(driver).tap(_target, count=2).perform()
+            LOGGER.debug(f"Double-touch the '{xpath}' element is success.")
+        except (selenium.common.exceptions.NoSuchElementException, RuntimeError) as e1:
+            LOGGER.exception(msg := f"Double-touch the '{xpath}' is failed")
+            raise e1(msg)
+        except TimeoutError:
+            LOGGER.exception(msg := f"Could not find the '{xpath}' within {timeout} sec.")
+            raise TimeoutError(msg)
+    elif isinstance(xpath, dict):
+        try:
+            TouchAction(driver).tap(x=xpath['x'], y=xpath['y'], count=2).perform()
+            LOGGER.debug(f"Double-touch the '{xpath}' position is success.")
+        except Exception:
+            LOGGER.exception(msg := f"Double-touch the '{xpath}' is failed")
+            raise Exception(msg)
+    else:
+        LOGGER.exception(msg := "Please check xpath parameter type is string or dict.")
+        raise Exception(msg)
 
 
-def long_press_element(driver, xpath, timeout=1.0) -> None:
+def long_press(driver, xpath: Union[str, dict], timeout=1.0) -> None:
     """Long press an element in current screen.
 
     :param WebDriver driver: WebDriver obj.
-    :param str xpath: Target element's xpath expression.
+    :param Union[str, dict] xpath: Target element's xpath expression or Target position dictionary {"x": x, "y": y}.
     :param float timeout: Waiting the timeout value to find element.
     """
-    driver.implicitly_wait(timeout)
-    try:
-        _target = driver.find_element(by=AppiumBy.XPATH, value=xpath)
-        TouchAction(driver).long_press(_target).release().perform()
-        LOGGER.debug(f"Long-press the '{xpath}' is success.")
-    except (selenium.common.exceptions.NoSuchElementException, RuntimeError) as ex:
-        LOGGER.exception(msg := f"Long-press the '{xpath}' is failed")
-        raise ex(msg)
-    except TimeoutError:
-        LOGGER.exception(msg := f"Could not find the '{xpath}' within {timeout} sec.")
-        raise TimeoutError(msg)
+    if isinstance(xpath, str):
+        driver.implicitly_wait(timeout)
+        try:
+            _target = driver.find_element(by=AppiumBy.XPATH, value=xpath)
+            TouchAction(driver).long_press(_target).release().perform()
+            LOGGER.debug(f"Long-press the '{xpath}' is success.")
+        except (selenium.common.exceptions.NoSuchElementException, RuntimeError) as ex:
+            LOGGER.exception(msg := f"Long-press the '{xpath}' is failed")
+            raise ex(msg)
+        except TimeoutError:
+            LOGGER.exception(msg := f"Could not find the '{xpath}' within {timeout} sec.")
+            raise TimeoutError(msg)
+    elif isinstance(xpath, dict):
+        try:
+            TouchAction(driver).long_press(x=xpath['x'], y=xpath['y']).release().perform()
+            LOGGER.debug(f"Long-press the '{xpath}' is success.")
+        except Exception:
+            LOGGER.exception(msg := f"Long-press the {xpath} is failed.")
+            raise Exception(msg)
+    else:
+        LOGGER.exception(msg := "Please check xpath parameter type is string or dict.")
+        raise Exception(msg)
 
 
 def scroll(driver, direction="up", times=1, x_position=None) -> None:
@@ -104,7 +136,7 @@ def scroll(driver, direction="up", times=1, x_position=None) -> None:
                 TouchAction(driver).press(x=x_position, y=int(_height / 2)).wait(100).move_to(x=x_position, y=int(
                     _height / 4 * 3)).release().perform()
         LOGGER.debug(f"Scroll to {direction} is finish.")
-    except Exception as ex:
+    except Exception:
         LOGGER.exception(msg := f"Could not scroll to {direction}.")
         raise Exception(msg)
 
@@ -154,18 +186,21 @@ def pinch_in(driver, times=1) -> None:
     standard_x = int(_window_size['width'] / 2)
     standard_y = int(_window_size['height'] / 2)
 
-    _x1_start = int(standard_x + (250 * math.cos(math.radians(45))))
-    _y1_start = int(standard_y + (250 * math.sin(math.radians(45))))
-    _x1_end = int(standard_x + (50 * math.cos(math.radians(45))))
-    _y1_end = int(standard_y + (50 * math.sin(math.radians(45))))
+    _max_distance = int(math.sqrt(math.pow(standard_x,2) + math.pow(standard_y, 2)) / 2)
+    _min_distance = int(math.sqrt(math.pow(standard_x,2) + math.pow(standard_y, 2)) / 5)
+
+    _x1_start = int(standard_x + (_max_distance * math.cos(math.radians(45))))
+    _y1_start = int(standard_y + (_max_distance * math.sin(math.radians(45))))
+    _x1_end = int(standard_x + (_min_distance * math.cos(math.radians(45))))
+    _y1_end = int(standard_y + (_min_distance * math.sin(math.radians(45))))
 
     _finger1 = TouchAction(driver)
     _finger1.press(x=_x1_start, y=_y1_start).wait(50).move_to(x=_x1_end, y=_y1_end).release()
 
-    _x2_start = int(standard_x + (250 * math.cos(math.radians(225))))
-    _y2_start = int(standard_y + (250 * math.sin(math.radians(225))))
-    _x2_end = int(standard_x + (50 * math.cos(math.radians(225))))
-    _y2_end = int(standard_y + (50 * math.sin(math.radians(225))))
+    _x2_start = int(standard_x + (_max_distance * math.cos(math.radians(225))))
+    _y2_start = int(standard_y + (_max_distance * math.sin(math.radians(225))))
+    _x2_end = int(standard_x + (_min_distance * math.cos(math.radians(225))))
+    _y2_end = int(standard_y + (_min_distance * math.sin(math.radians(225))))
 
     _finger2 = TouchAction(driver)
     _finger2.press(x=_x2_start, y=_y2_start).wait(50).move_to(x=_x2_end, y=_y2_end).release()
@@ -191,18 +226,21 @@ def pinch_out(driver, times=1) -> None:
     standard_x = int(_window_size['width'] / 2)
     standard_y = int(_window_size['height'] / 2)
 
-    _x1_start = int(standard_x + (50 * math.cos(math.radians(45))))
-    _y1_start = int(standard_y + (50 * math.sin(math.radians(45))))
-    _x1_end = int(standard_x + (250 * math.cos(math.radians(45))))
-    _y1_end = int(standard_y + (250 * math.sin(math.radians(45))))
+    _max_distance = int(math.sqrt(math.pow(standard_x, 2) + math.pow(standard_y, 2)) / 2)
+    _min_distance = int(math.sqrt(math.pow(standard_x, 2) + math.pow(standard_y, 2)) / 5)
+
+    _x1_start = int(standard_x + (_min_distance * math.cos(math.radians(45))))
+    _y1_start = int(standard_y + (_min_distance * math.sin(math.radians(45))))
+    _x1_end = int(standard_x + (_max_distance * math.cos(math.radians(45))))
+    _y1_end = int(standard_y + (_max_distance * math.sin(math.radians(45))))
 
     _finger1 = TouchAction(driver)
     _finger1.press(x=_x1_start, y=_y1_start).wait(50).move_to(x=_x1_end, y=_y1_end).release()
 
-    _x2_start = int(standard_x + (50 * math.cos(math.radians(225))))
-    _y2_start = int(standard_y + (50 * math.sin(math.radians(225))))
-    _x2_end = int(standard_x + (250 * math.cos(math.radians(225))))
-    _y2_end = int(standard_y + (250 * math.sin(math.radians(225))))
+    _x2_start = int(standard_x + (_min_distance * math.cos(math.radians(225))))
+    _y2_start = int(standard_y + (_min_distance * math.sin(math.radians(225))))
+    _x2_end = int(standard_x + (_max_distance * math.cos(math.radians(225))))
+    _y2_end = int(standard_y + (_max_distance * math.sin(math.radians(225))))
 
     _finger2 = TouchAction(driver)
     _finger2.press(x=_x2_start, y=_y2_start).wait(50).move_to(x=_x2_end, y=_y2_end).release()
@@ -240,17 +278,19 @@ def rotate(driver, degree=45, direction="clockwise", times=1) -> None:
     standard_x = int(_window_size['width'] / 2)
     standard_y = int(_window_size['height'] / 2)
 
+    _distance = (standard_x / 4 * 3) if (standard_x / 4 * 3) < (standard_y / 4 * 3) else (standard_y / 4 * 3)
+
     # create move position
     _x_list = []
     _y_list = []
     _move_times = int(degree / 5) + 1
     for i in range(_move_times):
-        if direction == "counterclockwise":
-            _x_list.append(int(standard_x + (200 * math.cos(math.radians(5 * i + 45)))))
-            _y_list.append(int(standard_y + (200 * math.sin(math.radians(5 * i + 45)))))
-        elif direction == "clockwise":
-            _x_list.append(int(standard_x - (200 * math.cos(math.radians(225 - 5 * i)))))
-            _y_list.append(int(standard_y - (200 * math.sin(math.radians(225 - 5 * i)))))
+        if direction == "clockwise":
+            _x_list.append(int(standard_x + (_distance * math.cos(math.radians(5 * i + 45)))))
+            _y_list.append(int(standard_y + (_distance * math.sin(math.radians(5 * i + 45)))))
+        elif direction == "counterclockwise":
+            _x_list.append(int(standard_x - (_distance * math.cos(math.radians(225 - 5 * i)))))
+            _y_list.append(int(standard_y - (_distance * math.sin(math.radians(225 - 5 * i)))))
 
     # Init TouchActions
     _finger1 = TouchAction(driver)
