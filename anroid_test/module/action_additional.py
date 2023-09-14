@@ -26,3 +26,38 @@ def enter_text(driver, xpath, text, clear=True, hide=True):
 
     if hide and driver.is_keyboard_shown():
         driver.hide_keyboard()
+
+
+def back(driver) -> None:
+    """Go back.
+
+    :param WebDriver driver: WebDriver obj.
+    """
+    driver.back()
+
+
+def shake(driver):
+    """Shake device.
+
+    :param WebDriver driver: WebDriver obj.
+    """
+    driver.shake()
+
+
+def lock_screen(driver, seconds):
+    """Lock screen.
+
+    :param WebDriver driver: WebDriver obj.
+    :param int seconds: The duration to lock the device, in seconds.
+    """
+    driver.lock(seconds)
+
+
+def unlock_screen(driver):
+    """Unlock screen.
+
+    :param WebDriver driver: WebDriver obj.
+    """
+    driver.unlock()
+
+

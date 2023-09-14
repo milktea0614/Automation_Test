@@ -314,10 +314,3 @@ def rotate(driver, degree=45, direction="clockwise", times=1) -> None:
         LOGGER.exception(msg := f"Could not Rotate {degree} degrees ({direction}).")
         raise selenium.common.exceptions.WebDriverException(msg)
 
-
-def back(driver) -> None:
-    """Go back.
-
-    :param WebDriver driver: WebDriver obj.
-    """
-    driver.back()
