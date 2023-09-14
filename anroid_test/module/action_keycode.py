@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Keycode of Interactions. ()
+Keycode of Interactions. (https://milktea0614.tistory.com/75)
 Refer to https://developer.android.com/reference/android/view/KeyEvent#constants_1
 """
 
