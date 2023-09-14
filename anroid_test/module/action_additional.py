@@ -9,6 +9,7 @@ from miraelogger import Logger
 LOGGER = Logger(log_name=__name__, stream_log_level=logging.DEBUG)
 
 
+# Keyboard
 def enter_text(driver, xpath, text, clear=True, hide=True):
     """Enter text.
 
@@ -28,6 +29,7 @@ def enter_text(driver, xpath, text, clear=True, hide=True):
         driver.hide_keyboard()
 
 
+# Back
 def back(driver) -> None:
     """Go back.
 
@@ -35,7 +37,7 @@ def back(driver) -> None:
     """
     driver.back()
 
-
+# HW actions
 def shake(driver):
     """Shake device.
 
@@ -58,6 +60,14 @@ def unlock_screen(driver):
 
     :param WebDriver driver: WebDriver obj.
     """
-    driver.unlock()
+    if driver.is_locked:
+        driver.unlock()
 
 
+def authenticate_fingerprint(driver, finger_id):
+    """Authenticate users by using their fingerprint scans on supported Android emulators.
+
+    :param WebDriver driver: WebDriver obj.
+    :param int finger_id: Fingerprints stored in Android Keystore system (from 1 to 10)
+    """
+    driver.finger_print(finger_id)
