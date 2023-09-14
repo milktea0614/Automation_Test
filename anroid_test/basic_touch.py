@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import datetime
 import time
-import logging
 
 import appium.webdriver.appium_service
 from appium import webdriver
 
-from action_touch import *
+from anroid_test.module.action_touch import *
 
 import urllib3.exceptions
 

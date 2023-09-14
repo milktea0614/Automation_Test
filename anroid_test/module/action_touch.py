@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+"""Touch of Interactions. (https://milktea0614.tistory.com/74)"""
+
 import logging
 import math
 from typing import Union
@@ -163,10 +165,10 @@ def swipe(driver, direction="right", times=1, y_position=None) -> None:
 
     try:
         for _ in range(times):
-            if direction.lower() == "right":
+            if direction.lower() == "left":
                 TouchAction(driver).press(x=int(_width / 2), y=y_position).wait(100).move_to(x=int(_width / 4),
                                                                                                   y=y_position).release().perform()
-            elif direction.lower() == "left":
+            elif direction.lower() == "right":
                 TouchAction(driver).press(x=int(_width / 2), y=y_position).wait(100).move_to(x=int(_width / 4 * 3),
                                                                                                   y=y_position).release().perform()
 
