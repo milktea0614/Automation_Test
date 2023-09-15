@@ -6,6 +6,8 @@ import appium.webdriver.appium_service
 from appium import webdriver
 
 from anroid_test.module.action_touch import *
+from anroid_test.module.action_keycode import *
+from anroid_test.module.action_additional import *
 
 import urllib3.exceptions
 
