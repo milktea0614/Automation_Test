@@ -34,6 +34,7 @@ def save_ui_dump(driver, directory_path, is_mobile=True):
     _screenshot = driver.save_screenshot(_screenshot_path)
 
 
+# ScreenRecord (appium/webdriver/extensions/screen_record.py)
 def start_recording(driver):
     """Start recording screen.
 
