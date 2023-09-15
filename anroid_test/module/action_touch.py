@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Touch of Interactions. (https://milktea0614.tistory.com/74)"""
+"""Touch of Interactions.
+(https://milktea0614.tistory.com/74)
+"""
 
 import logging
 import math

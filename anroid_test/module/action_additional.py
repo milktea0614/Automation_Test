@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Additional action (e.g. Keyboard, back, shake, lock, rotate) of Interactions. ()"""
+"""Additional action (e.g. Keyboard, back, shake, lock, rotate) of Interactions.
+(https://milktea0614.tistory.com/76)
+"""
 
 import logging
 
@@ -37,6 +39,7 @@ def back(driver) -> None:
     """
     driver.back()
 
+
 # HW actions
 def shake(driver):
     """Shake device.
@@ -65,7 +68,7 @@ def unlock_screen(driver):
 
 
 def authenticate_fingerprint(driver, finger_id):
-    """Authenticate users by using their fingerprint scans on supported Android emulators.
+    """Authenticate users by using their fingerprint scans on supported 'Android emulators'.
 
     :param WebDriver driver: WebDriver obj.
     :param int finger_id: Fingerprints stored in Android Keystore system (from 1 to 10)
